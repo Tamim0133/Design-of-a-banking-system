@@ -1,4 +1,7 @@
 import java.util.*;
+/*------------------------------------------------------
+                    Abstraction
+-------------------------------------------------------*/
 abstract class Client {
     private String name;
     private String email;
@@ -23,7 +26,8 @@ abstract class Client {
         System.out.println("Bank Name : " + this.bankName);
     }
 
-    // getters and setters
+    // getters and setters (Encapsulation)
+    // ----------------------------------------------------------------
     public String getName() {
         return name;
     }
@@ -56,14 +60,18 @@ abstract class Client {
     }
 
 }
-
+/*------------------------------------------------------
+                    Inheritance
+-------------------------------------------------------*/
 class Employee extends Client{
     private String empType = "";
     public Employee(String name, String email, String phoneNum, String accNum, String bankName, String employeeType){
         super(name, email, phoneNum, accNum, bankName);
         this.empType = employeeType;
     }
-
+/*------------------------------------------------------
+                Overriding Polymorphism
+-------------------------------------------------------*/
     @Override
     public void printClient()
     {
@@ -71,7 +79,8 @@ class Employee extends Client{
         System.out.println("Type : " + this.empType);
     }
 
-    // getters and setters
+    // getters and setters  (Encapsulation)
+    // ----------------------------------------------------------------
     public String getEmpType() {
         return empType;
     }
@@ -93,6 +102,9 @@ class Employee extends Client{
 
 }
 
+/*------------------------------------------------------
+                    Inheritance 
+-------------------------------------------------------*/
 class Customer extends Client{
     private String bin; // Single Person
     private String tin; // Organization
@@ -113,7 +125,8 @@ class Customer extends Client{
         super(employee.getName(), employee.getEmail(), employee.getPhoneNum(), employee.getAccNum(),employee.getBankName());
         this.bin = bin;
     }
-
+        /* Overriding Polymorphism
+        -------------------------------------------------------*/
     @Override
     public void printClient(){
         super.printClient();
@@ -237,9 +250,9 @@ class Bank
 
     public double calculateInterest(Account account) {
         if (account.getAccountType().equals("Saving")) {
-            return account.getBalance() * 0.025; // 2.5% annual interest for Savings account
+            return account.getBalance() * 0.025; 
         } else  {
-            return account.getBalance() * 0.02; // 2% annual interest for Salary account
+            return account.getBalance() * 0.02;
         }
     }
 }
