@@ -1,6 +1,6 @@
 import java.util.*;
 /*------------------------------------------------------
-                    Abstraction
+                    Client
 -------------------------------------------------------*/
 abstract class Client {
     private String name;
@@ -61,7 +61,7 @@ abstract class Client {
 
 }
 /*------------------------------------------------------
-                    Inheritance
+                    Employee
 -------------------------------------------------------*/
 class Employee extends Client{
     private String empType = "";
@@ -69,9 +69,7 @@ class Employee extends Client{
         super(name, email, phoneNum, accNum, bankName);
         this.empType = employeeType;
     }
-/*------------------------------------------------------
-                Overriding Polymorphism
--------------------------------------------------------*/
+
     @Override
     public void printClient()
     {
@@ -84,9 +82,6 @@ class Employee extends Client{
     public String getEmpType() {
         return empType;
     }
-    // public void setEmpType(String empType) { // setter apadoto lagtesena
-    //     this.empType = empType;
-    // }
     public String getName() {
         return super.getName();
     }
@@ -102,8 +97,33 @@ class Employee extends Client{
 
 }
 
+class Manager extends Employee{
+    public Manager (String name, String email, String phoneNum, String accNum, String bankName, String employeeType)
+    {
+        super(name, email, phoneNum, accNum, bankName, "Manager");
+        // this.empType = employeeType;
+    }
+}
+
+class Officer extends Employee{
+    public Officer (String name, String email, String phoneNum, String accNum, String bankName, String employeeType)
+    {
+        super(name, email, phoneNum, accNum, bankName, "Officer");
+        // this.empType = employeeType;
+    }
+}
+
+class Trainee extends Employee{
+    public Trainee (String name, String email, String phoneNum, String accNum, String bankName, String employeeType)
+    {
+        super(name, email, phoneNum, accNum, bankName, "Trainee");
+        // this.empType = employeeType;
+    }
+}
+
+
 /*------------------------------------------------------
-                    Inheritance 
+                    Customer 
 -------------------------------------------------------*/
 class Customer extends Client{
     private String bin; // Single Person
@@ -135,23 +155,60 @@ class Customer extends Client{
     }
 }
 
+class SinglePerson extends Customer{
+    private String bin;
+    public SinglePerson(String name , String email, String phoneNum, String accNum, String bankName, String bin, String tin)
+    {
+        super(name, email, phoneNum, accNum, bankName, bin,tin);   
+        this.bin = bin;
+    }
+
+    public void setBin(String bin) {this.bin = bin;}
+    public String getBin(){return this.bin;}
+}
+
+class Organization extends Customer{
+    private String tin;
+    public Organization(String name , String email, String phoneNum, String accNum, String bankName, String bin, String tin)
+    {
+        super(name, email, phoneNum, accNum, bankName, bin,tin);
+        this.tin = tin;
+    }
+
+    public void setTin(String tin) {this.tin = tin;}
+    public String getTin(){return this.tin;}
+}
+
+
+/*------------------------------------------------------
+                    Accounts 
+-------------------------------------------------------*/
+
 class Account
 {
     private String accountNumber;
     private String accountType;
     private double balance;
 
+  
     public Account(String accountNumber, String type) {
         this.accountNumber = accountNumber;
         this.accountType = type;
         this.balance = 0.0;
     }
 
+    public Account(String accountNumber) {
+        this.accountNumber = accountNumber;
+        this.accountType = null;
+        this.balance = 0.0;
+    }
+
+
     public void deposit(double amount) {
         this.balance += amount;
     }
 
-    public void withdraw(double amount)
+    public double withdraw(double amount)
     {
         if(amount <= this.balance){
             balance -= amount;
@@ -159,13 +216,44 @@ class Account
         else{
             System.out.println("Not Sufficient Balance");
         }
+        return amount;
     }
 
     public double getBalance() {return this.balance;}
     public String getAccountType(){return this.accountType;}
 
+    public void setAccountNumber(String accountNumber) {this.accountNumber = accountNumber;}
+   public void setAccountType(String accountType) {this.accountType = accountType;}
+
 }
 
+class SavingsAccount extends Account
+{
+    private double interest = 0.25;
+    private double balance = super.getBalance();
+
+    public SavingsAccount(String accountNumber)
+    {
+        super(accountNumber);
+        super.setAccountNumber(accountNumber);
+        super.setAccountType("Savings");
+    }
+}
+
+class SalaryAccount extends Account{
+    private double interest = 0.2;
+    private double balance = super.getBalance();
+
+    public SalaryAccount(String accountNumber)
+    {
+        super(accountNumber);
+        super.setAccountNumber(accountNumber);
+        super.setAccountType("Salary");
+    }
+}
+/*-------------------------------------
+                 Bank
+----------------------------------*/
 class Bank
 {
     private String name;
@@ -257,6 +345,64 @@ class Bank
     }
 }
 
+
+/*------------------------------------------------------
+                    Bkash Wallet Account
+-------------------------------------------------------*/
+
+class BkashAccount{
+    private double balance = 0.0;
+
+    public void addBalance(double balance) {
+        this.balance += balance;
+    }
+    public void printBalance()
+    {
+        System.out.println("Current Bkash Balance: " + balance);
+    }
+
+    public double withdrawFromBkash(double amount, Bank bank, Account account)
+    {
+        if(balance < amount){
+            System.out.println("You Do not have enough money :')");
+            return 0.0;
+        }
+        else 
+        {
+            bank.DepositMoney(account, amount);
+            balance -= amount;
+            return amount;
+        }
+    }
+}
+// Credit Card Information
+//------------------------------    
+class CreditCard{
+    private double balance = 0.0;
+
+    public void addBalance(double balance) {
+        this.balance += balance;
+    }
+    public void printBalance()
+    {
+        System.out.println("Current Credit Card Balance: " + balance);
+    }
+
+    public double withdrawFromCreditCard(double amount, Account account, Bank bank)
+    {
+        if(balance < amount){
+            System.out.println("You Do not have enough money :')");
+            return 0.0;
+        }
+        else 
+        {
+            bank.DepositMoney(account, amount);
+            balance -= amount;
+            return amount;
+        }
+    }
+}
+
 public class Main{
     public static void main(String[] args)
     {
@@ -264,10 +410,10 @@ public class Main{
 
 
         Employee employee1 = new Employee("Rizvee", "<EMAIL>", "0000xxxxx", null, "Dutch Bangla Bank", "Employee");
-        Employee employee2 = new Employee("Mary", "<EMAIL>", "0712345678", null, "Dutch Bangla Bank", "Employee");
-        Employee employee3 = new Employee("Peter", "<EMAIL>", "0712345678", null, "Dutch Bangla Bank", "Employee");
-        Employee employee4 = new Employee("Jane", "<EMAIL>", "0712345678", null, "Dutch Bangla Bank", "Employee");
-        Employee employee5 = new Employee("Sara", "<EMAIL>","01902008974",null, "Dutch Bangla Bank", "Employee");
+        Employee employee2 = new Employee("Amio", "<EMAIL>", "0712345678", null, "Dutch Bangla Bank", "Employee");
+        Employee employee3 = new Employee("Papry", "<EMAIL>", "0712345678", null, "Dutch Bangla Bank", "Employee");
+        Employee employee4 = new Employee("Shakib", "<EMAIL>", "0712345678", null, "Dutch Bangla Bank", "Employee");
+        Employee employee5 = new Employee("Tamim", "<EMAIL>","01902008974",null, "Dutch Bangla Bank", "Employee");
 
         DutchBanglaBank.addEmployee(employee1);
         DutchBanglaBank.addEmployee(employee2);
@@ -307,5 +453,29 @@ public class Main{
         System.out.println(customer2.getName()+" Balance : " + customer2Account.getBalance());        
         System.out.println(customer3.getName()+" Balance : " + customer3Account.getBalance());
         System.out.println();
+
+        DutchBanglaBank.transferMoney(customer2Account, customer3Account, 2000); // This will not be possible
+        System.out.println(customer2.getName()+" Balance : " + customer2Account.getBalance());        
+        System.out.println(customer3.getName()+" Balance : " + customer3Account.getBalance());
+        System.out.println();
+
+    
+        BkashAccount forRizvee = new BkashAccount();
+
+        forRizvee.printBalance();
+        forRizvee.addBalance(customer2Account.withdraw(100));
+        forRizvee.printBalance();
+        System.out.println(customer2.getName()+" Balance : " + customer2Account.getBalance() + " \n");   
+        
+
+        forRizvee.withdrawFromBkash(330, DutchBanglaBank, customer2Account);
+        forRizvee.printBalance();
+        System.out.println(customer2.getName()+" Balance : " + customer2Account.getBalance() + "\n");   
+
+        forRizvee.withdrawFromBkash(33, DutchBanglaBank, customer2Account);
+        forRizvee.printBalance();
+        System.out.println(customer2.getName()+" Balance : " + customer2Account.getBalance());   
+
+        
     }
 }
